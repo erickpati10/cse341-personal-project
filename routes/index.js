@@ -3,5 +3,6 @@ const router = express.Router();
 
 router.use('/', require('./swagger'));
 router.use('/recipes', require('./recipes'));
+router.use('/chefs', require('./chefs'));
 
 module.exports = router;
