@@ -1,0 +1,23 @@
+[
+  {
+    "title": "Bechamel Sauce",
+    "ingredients": "Milk, Nutmeg, Salt, butter and flour",
+    "instruction": "Melt butter in a large saucepan over medium heat. Add flour and whisk into the melted butter until smooth. Cook and stir until flour turns a light, golden, sandy color, about 7 minutes. Increase heat to medium-high and slowly whisk in milk until thickened by the roux. Bring to a gentle simmer, then reduce heat to medium-low and continue simmering until the flour has softened and no longer tastes gritty, 10 to 20 minutes. Last step is to season with salt and nutmeg.",
+    "cuisine": "French",
+    "category": "Sauces",
+    "equipment": "Sauce pan, Whisk",
+    "cookTime": "40 minutes",
+    "servings": "4"
+  },
+
+  {
+    "title": "Chicken Noddle Soup",
+    "ingredients": "Cooked Chicken, Celery, Onion, Carrots, Chicken Stock or Broth, Butter, Salt and Black Pepper. ",
+    "instruction": "Add butter, diced celery and carrots to a large stock pot over medium-high heat. Saute for 3 minutes. Add chicken stock and bring to a boil. Add the noddles and the chicken. Taste it again and add more seasoning if needed.",
+    "cuisine": "American",
+    "category": "Soup",
+    "equipment": "Stockpot",
+    "cookTime": "35 minutes",
+    "servings": "6"
+  }
+]
