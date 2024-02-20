@@ -7,10 +7,10 @@ router.get('/', chefsController.getAll);
 
 router.get('/:id', chefsController.getSingle);
 
-router.post('/', chefsController.createchef);
+router.post('/', chefsController.createChefInfo);
 
-router.put('/:id', chefsController.updatechef);
+router.put('/:id', chefsController.updateChefInfo);
 
-router.delete('/:id', chefsController.deletechef);
+router.delete('/:id', chefsController.deleteChefInfo);
 
 module.exports = router;
