@@ -30,7 +30,7 @@ const createChefInfo = async (req, res) => {
   if (response.acknowledged) {
     res.status(201).json(response);
   } else {
-    res.status(500).json(response.error || 'Some error occurred while creating the chef.');
+    res.status(500).json(response.error || 'Some error occurred while creating the request.');
   }
 };
 
@@ -49,7 +49,7 @@ const updateChefInfo = async (req, res) => {
   if (response.modifiedCount > 0) {
     res.status(204).send();
   } else {
-    res.status(500).json(response.error || 'Some error occurred while updating the chef.');
+    res.status(500).json(response.error || 'Some error occurred while updating the request.');
   }
 };
 
@@ -60,7 +60,7 @@ const deleteChefInfo = async (req, res) => {
   if (response.deletedCount > 0) {
     res.status(204).send();
   } else {
-    res.status(500).json(response.error || 'Some error occurred while deleting the chef.');
+    res.status(500).json(response.error || 'Some error occurred while deleting the request.');
   }
 };
 
