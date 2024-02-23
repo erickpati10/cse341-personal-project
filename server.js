@@ -33,7 +33,7 @@ passport.use(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: 'https://cse341-personal-project-jjxi.onrender.com/auth/login/callback'
+      callbackURL: 'https://cse341-personal-project-jjxi.onrender.com/auth/login'
     },
     (accessToken, refreshToken, profile, done) => {
       return done(null, profile);
