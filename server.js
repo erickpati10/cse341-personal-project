@@ -6,12 +6,14 @@ const passport = require('passport');
 const GitHubStrategy = require('passport-github').Strategy;
 const mongodb = require('./db/connect');
 
+const oauthRoutes = require('./routes/oauth'); // Import oauth.js routes
+
 const port = process.env.PORT || 8080;
 const server = express();
 
 server
   .use(bodyParser.json())
-  .use(session({ secret: 'your_session_secret', resave: true, saveUninitialized: true }))
+  .use(session({ secret: process.env.SESSION_SECRET, resave: true, saveUninitialized: true }))
   .use(passport.initialize())
   .use(passport.session())
   .use((req, res, next) => {
@@ -27,10 +29,22 @@ passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
 
-// Update the require statement to use 'oauth.js'
-const oauthRoutes = require('./routes/oauth');
+// Configure GitHub authentication strategy
+passport.use(
+  new GitHubStrategy(
+    {
+      clientID: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      callbackURL: 'https://cse341-personal-project-jjxi.onrender.com/auth/login/callback'
+    },
+    (accessToken, refreshToken, profile, done) => {
+      return done(null, profile);
+    }
+  )
+);
 
-server.use('/auth', oauthRoutes); // Use the variable name 'oauthRoutes'
+// Include GitHub OAuth routes
+server.use('/auth', oauthRoutes);
 
 // Include your existing routes
 server.use('/chef', require('./routes/chefs'));
