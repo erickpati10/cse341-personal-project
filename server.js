@@ -5,7 +5,7 @@ const passport = require('passport');
 const GitHubStrategy = require('passport-github').Strategy;
 const mongodb = require('./db/connect');
 
-const oauthRoutes = require('./routes/oauth'); // Import oauth.js routes
+const oauthRoutes = require('./routes/oauth');
 
 const port = process.env.PORT || 8080;
 const server = express();
@@ -28,7 +28,6 @@ passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
 
-// Configure GitHub authentication strategy
 passport.use(
   new GitHubStrategy(
     {
@@ -41,11 +40,7 @@ passport.use(
     }
   )
 );
-
-// Include GitHub OAuth routes
 server.use('/auth', oauthRoutes);
-
-// Include your existing routes
 server.use('/chef', require('./routes/chefs'));
 server.use('/index', require('./routes/index'));
 server.use('/recipes', require('./routes/recipes'));
@@ -55,7 +50,6 @@ mongodb.initDb((err) => {
   if (err) {
     console.error(err);
   } else {
-    // Start the server
     server.listen(port, () => {
       console.log(`Connected to DB and listening on ${port}`);
     });
