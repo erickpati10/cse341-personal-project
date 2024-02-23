@@ -33,7 +33,7 @@ const oauthRoutes = require('./routes/oauth');
 server.use('/auth', oauthRoutes); // Use the variable name 'oauthRoutes'
 
 // Include your existing routes
-server.use('/chef', require('./routes/chef'));
+server.use('/chef', require('./routes/chefs'));
 server.use('/index', require('./routes/index'));
 server.use('/recipes', require('./routes/recipes'));
 server.use('/swagger', require('./routes/swagger'));
