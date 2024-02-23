@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
+const GitHubStrategy = require('passport-github').Strategy;
 const mongodb = require('./db/connect');
 
 const port = process.env.PORT || 8080;
@@ -18,8 +19,20 @@ server
     next();
   });
 
-//routes
-server.use('/auth', require('./routes/authRoutes'));
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((obj, done) => {
+  done(null, obj);
+});
+
+// Update the require statement to use 'oauth.js'
+const oauthRoutes = require('./routes/oauth');
+
+server.use('/auth', oauthRoutes); // Use the variable name 'oauthRoutes'
+
+// Include your existing routes
 server.use('/chef', require('./routes/chef'));
 server.use('/index', require('./routes/index'));
 server.use('/recipes', require('./routes/recipes'));
@@ -29,6 +42,7 @@ mongodb.initDb((err) => {
   if (err) {
     console.error(err);
   } else {
+    // Start the server
     server.listen(port, () => {
       console.log(`Connected to DB and listening on ${port}`);
     });
