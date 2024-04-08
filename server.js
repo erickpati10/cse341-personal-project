@@ -2,7 +2,7 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
-const session = require('express-session');
+// const session = require('express-session');
 const cors = require('cors');
 const swaggerUI = require('swagger-ui-express');
 const swaggerDoc = require('./swagger.json');
@@ -18,7 +18,7 @@ server
   .use(bodyParser.json())
   .use(cors())
   .use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc))
-  .use(session({ secret: process.env.SESSION_SECRET, resave: true, saveUninitialized: true }))
+  // .use(session({ secret: process.env.SESSION_SECRET, resave: true, saveUninitialized: true }))
   .use(express.json())
   .use(express.urlencoded({ extended: true }));
 
@@ -34,14 +34,14 @@ server
   });
 
 
-  server.use('/', require('./routes'));
+// server.use('/', require('./routes'));
 
 
 
-// server.use('/chef', require('./routes/chefs'));
-// server.use('/index', require('./routes/index'));
-// server.use('/recipes', require('./routes/recipes'));
-// server.use('/swagger', require('./routes/swagger'));
+server.use('/chef', require('./routes/chefs'));
+server.use('/index', require('./routes/index'));
+server.use('/recipes', require('./routes/recipes'));
+server.use('/swagger', require('./routes/swagger'));
 
 server.use((err, req, res, next) => {
   console.error(err);
