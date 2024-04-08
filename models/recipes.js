@@ -12,6 +12,6 @@ const recipeSchema = new mongoose.Schema({
   servings: { type: String, required: true }
 });
 
-const Recipes = mongoose.model('recipes', recipeSchema);
+const Recipe = mongoose.model('recipes', recipeSchema);
 
-module.exports = Recipes;
+module.exports = Recipe;

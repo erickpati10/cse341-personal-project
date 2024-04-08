@@ -9,8 +9,8 @@ const chefSchema = new mongoose.Schema({
   yearsOfExperience: { type: String, required: true }
 });
 
-const Chefs = mongoose.model('chefs', chefSchema);
+const Chef = mongoose.model('chefs', chefSchema);
 
-module.exports = Chefs;
+module.exports = Chef;
 
 
