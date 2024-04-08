@@ -5,7 +5,7 @@ const chefsController = require('../controllers/chefs');
 
 router.get('/', chefsController.getAll);
 
-router.get('/:id', chefsController.getSingle);
+router.get('/:id', chefsController.getSingleChef);
 
 router.post('/', chefsController.createChefInfo);
 

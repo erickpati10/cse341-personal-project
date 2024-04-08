@@ -1,72 +1,105 @@
-const mongodb = require('../db/connect');
+const mongodb = require('../config/db/connect');
 const ObjectId = require('mongodb').ObjectId;
+const chefs = require('../models/chefs');
 
 const getAll = async (req, res) => {
-  const result = await mongodb.getDb().db().collection('chefs').find();
-  result.toArray().then((lists) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).json(lists);
-  });
+  try {
+    const allChefs = await chefs.find();
+    res.status(200).json(allChefs);
+  } catch (error) {
+    console.error('Error fetching vailabilities:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
 
-const getSingle = async (req, res) => {
-  const userId = new ObjectId(req.params.id);
-  const result = await mongodb.getDb().db().collection('chefs').find({ _id: userId });
-  result.toArray().then((lists) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).json(lists[0]);
-  });
+const getSingleChef = async (req, res) => {
+  if (!ObjectId.isValid(req.params.id)) {
+    return res.status(400).json('Invalid ID');
+  }
+
+  const chefId = new ObjectId(req.params.id);
+
+  try {
+    const chef = await Chef.findById(chefId);
+    if (!chef) {
+      return res.status(404).json({ error: 'Chef not found' });
+    }
+    res.status(200).json(chef);
+  } catch (error) {
+    console.error('Error fetching chef by ID:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
 
-const createChefInfo = async (req, res) => {
-  const chef = {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    nationality: req.body.nationality,
-    specialty: req.body.specialty,
-    yearsOfExperience: req.body.yearsOfExperience
+
+  const createChefInfo = async (req, res) => {
+    try {
+      const { chef_id, firstName, lastName, nationality, specialty, yearsOfExperience } = req.body;
+      const chef = new Chef({
+        _id: chef_id,
+        firstName,
+        lastName,
+        nationality,
+        specialty,
+        yearsOfExperience
+      });
+  
+      const insertedChef = await chef.save();
+      res.status(201).json(insertedChef._id);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   };
-  const response = await mongodb.getDb().db().collection('chefs').insertOne(chef);
-  if (response.acknowledged) {
-    res.status(201).json(response);
-  } else {
-    res.status(500).json(response.error || 'Some error occurred while creating the request.');
-  }
-};
 
-const updateChefInfo = async (req, res) => {
-  const userId = new ObjectId(req.params.id);
-  // be aware of updateOne if you only want to update specific fields
-  const chef = {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    nationality: req.body.nationality,
-    specialty: req.body.specialty,
-    yearsOfExperience: req.body.yearsOfExperience
+  const updateChefInfo = async (req, res) => {
+    if (!ObjectId.isValid(req.params.id)) {
+      return res.status(400).json('Invalid ID');
+    }
+  
+    const chefId = new ObjectId(req.params.id);
+  
+    try {
+      const { firstName, lastName, nationality, specialty, yearsOfExperience } = req.body;
+  
+      const updatedChef = await Chef.findByIdAndUpdate(chefId, {
+        firstName,
+        lastName,
+        nationality,
+        specialty,
+        yearsOfExperience
+      }, { new: true });
+  
+      if (!updatedChef) {
+        return res.status(404).json({ error: 'Chef not found' });
+      }
+  
+      res.sendStatus(204);
+    } catch (error) {
+      console.error('Error updating chef:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
   };
-  const response = await mongodb.getDb().db().collection('chefs').replaceOne({ _id: userId }, chef);
-  console.log(response);
-  if (response.modifiedCount > 0) {
-    res.status(204).send();
-  } else {
-    res.status(500).json(response.error || 'Some error occurred while updating the request.');
-  }
-};
 
-const deleteChefInfo = async (req, res) => {
-  const userId = new ObjectId(req.params.id);
-  const response = await mongodb.getDb().db().collection('chefs').deleteOne({ _id: userId }, true);
-  console.log(response);
-  if (response.deletedCount > 0) {
-    res.status(204).send();
-  } else {
-    res.status(500).json(response.error || 'Some error occurred while deleting the request.');
-  }
-};
+  const deleteChefInfo = async (req, res) => {
+    if (!ObjectId.isValid(req.params.id)) {
+      return res.status(400).json('Invalid ID');
+    }
+  
+    const chefId = new ObjectId(req.params.id);
+  
+    try {
+      await Chef.deleteOne({ _id: chefId });
+      res.sendStatus(200);
+    } catch (error) {
+      console.error('Error deleting chef:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+  
 
 module.exports = {
   getAll,
-  getSingle,
+  getSingleChef,
   createChefInfo,
   updateChefInfo,
   deleteChefInfo
